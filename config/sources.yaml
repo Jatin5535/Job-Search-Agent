@@ -1,0 +1,18 @@
+# Add employer-specific public ATS boards here.
+sources: []
+
+career_pages: []
+
+email_alert_sources:
+  - linkedin
+  - naukri
+  - indeed
+  - wellfound
+  - cutshort
+  - instahyre
+  - hirist
+  - foundit
+  - shine
+  - timesjobs
+  - glassdoor
+  - flexjobs

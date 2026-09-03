@@ -1,0 +1,6 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Career Control Tower Apply Assistant</title>
+<style>body{font-family:system-ui;max-width:900px;margin:40px auto;padding:0 20px}textarea{width:100%;min-height:220px}button,a{padding:10px 14px;margin:5px;border:1px solid #ccc;border-radius:8px;background:#fff;text-decoration:none;color:#111;cursor:pointer}.card{border:1px solid #ddd;border-radius:12px;padding:18px;margin:15px 0}</style></head>
+<body><h1>Apply Assistant</h1><p>Human-in-the-loop application workspace. It does not submit applications automatically.</p>
+<div class="card"><label>Application URL<br><input id="url" style="width:100%;padding:10px"></label><br><a id="open" target="_blank">Open application</a></div>
+<div class="card"><h3>Application answers</h3><textarea id="answers"></textarea><button onclick="navigator.clipboard.writeText(document.getElementById('answers').value)">Copy answers</button></div>
+<script>const p=new URLSearchParams(location.search); const u=p.get('url')||''; document.getElementById('url').value=u; document.getElementById('open').href=u;</script></body></html>

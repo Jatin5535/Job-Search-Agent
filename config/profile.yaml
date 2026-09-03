@@ -1,0 +1,35 @@
+profile:
+  full_name: ""
+  email: ""
+  phone: ""
+  linkedin_url: ""
+  github_url: ""
+  portfolio_url: ""
+  current_location: "India"
+  work_authorization: ""
+  notice_period: ""
+  headline: "AI Engineer / Solutions Architect"
+  target_titles:
+    - AI Engineer
+    - Generative AI Engineer
+    - GenAI Engineer
+    - Applied AI Engineer
+    - ML Engineer
+    - Machine Learning Engineer
+    - LLM Engineer
+    - AI Solutions Architect
+    - Generative AI Solutions Architect
+    - AI Architect
+    - AI Consultant
+  years_experience: 2
+  location_preferences:
+    remote_india: true
+    india_cities: [Bengaluru, Bangalore, Hyderabad, Pune, Mumbai, Delhi, Delhi NCR, Gurugram, Chennai, Noida]
+    international: [Netherlands, Amsterdam, Rotterdam, Utrecht, Germany, Berlin, United Kingdom, London]
+  must_have_skills: [Python, Generative AI, LLM, RAG, AWS]
+  strong_skills: [AI Agents, LangChain, LangGraph, Vector Database, Embeddings, Retrieval Augmented Generation, Prompt Engineering, FastAPI, Docker, Kubernetes, Azure, GCP, Solutions Architecture, Cloud Architecture, REST API, React]
+  nice_to_have_skills: [Bedrock, SageMaker, OpenAI, Anthropic, Gemini, PostgreSQL, MongoDB]
+  avoid_title_terms: [Senior, Staff, Principal, Director, Head]
+  preferred_work_modes: [remote, hybrid]
+  target_domains: [AI, SaaS, Cloud, Developer Tools, FinTech, Enterprise Software]
+  llm_enabled: false

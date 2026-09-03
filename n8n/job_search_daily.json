@@ -1,0 +1,44 @@
+{
+  "name": "Personal Job Search Agent - Daily",
+  "nodes": [
+    {
+      "parameters": {"rule": {"interval": [{"field": "days", "daysInterval": 1}] }},
+      "id": "1",
+      "name": "Daily",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [260, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://job-agent:8000/run",
+        "options": {}
+      },
+      "id": "2",
+      "name": "Run Agent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [500, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "http://job-agent:8000/jobs?min_score=80&limit=20",
+        "options": {}
+      },
+      "id": "3",
+      "name": "Get Shortlist",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [740, 300]
+    }
+  ],
+  "connections": {
+    "Daily": {"main": [[{"node": "Run Agent", "type": "main", "index": 0}]]},
+    "Run Agent": {"main": [[{"node": "Get Shortlist", "type": "main", "index": 0}]]}
+  },
+  "active": false,
+  "settings": {},
+  "versionId": "job-search-agent-v1"
+}

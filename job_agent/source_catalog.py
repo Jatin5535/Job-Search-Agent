@@ -1,0 +1,42 @@
+from __future__ import annotations
+from pathlib import Path
+import yaml
+
+ROOT = Path(__file__).resolve().parents[1]
+
+DEFAULT_SOURCES = {
+    'job_boards_via_alert_email': [
+        {'name': 'LinkedIn Jobs', 'site': 'linkedin', 'method': 'email_alert', 'notes': 'Use LinkedIn job alerts; do not automate authenticated browsing or submissions.'},
+        {'name': 'Naukri', 'site': 'naukri', 'method': 'email_alert', 'notes': 'Use Naukri alerts/forwarded emails; do not automate login or submission.'},
+        {'name': 'Indeed', 'site': 'indeed', 'method': 'email_alert', 'notes': 'Use Indeed job alerts.'},
+        {'name': 'Wellfound', 'site': 'wellfound', 'method': 'email_alert', 'notes': 'Saved searches can send daily/weekly alerts.'},
+        {'name': 'Cutshort', 'site': 'cutshort', 'method': 'email_alert', 'notes': 'Job alerts are supported; especially useful for India tech/startups.'},
+        {'name': 'Instahyre', 'site': 'instahyre', 'method': 'email_alert', 'notes': 'Use account alerts/notifications where available.'},
+        {'name': 'Hirist', 'site': 'hirist', 'method': 'email_alert', 'notes': 'Technology-focused India board; use permitted alerts.'},
+        {'name': 'Foundit', 'site': 'foundit', 'method': 'email_alert', 'notes': 'Use permitted job alerts.'},
+        {'name': 'Shine', 'site': 'shine', 'method': 'email_alert', 'notes': 'Use permitted job alerts.'},
+        {'name': 'TimesJobs', 'site': 'timesjobs', 'method': 'email_alert', 'notes': 'Use permitted job alerts.'},
+        {'name': 'Glassdoor Jobs', 'site': 'glassdoor', 'method': 'email_alert', 'notes': 'Use permitted alerts; useful for company context as well.'},
+        {'name': 'FlexJobs', 'site': 'flexjobs', 'method': 'email_alert', 'notes': 'Prefer account alerts; avoid scraping gated content.'},
+    ],
+    'public_ats': [
+        {'name': 'Greenhouse', 'provider': 'greenhouse', 'method': 'public_api', 'config': 'board_token'},
+        {'name': 'Lever', 'provider': 'lever', 'method': 'public_api', 'config': 'account'},
+        {'name': 'Ashby', 'provider': 'ashby', 'method': 'public_api', 'config': 'job_board_name'},
+        {'name': 'SmartRecruiters', 'provider': 'smartrecruiters', 'method': 'public_posting_api', 'config': 'company_identifier', 'notes': 'Use the public Posting API where the employer exposes it; some endpoints/fields may require credentials.'},
+        {'name': 'Workable', 'provider': 'career_page', 'method': 'public_career_page', 'config': 'url', 'notes': 'Use employer-published public careers pages unless an authorized API integration is available.'},
+        {'name': 'Employer career pages', 'provider': 'career_page', 'method': 'public_career_page', 'config': 'url', 'notes': 'Configure only public pages you are allowed to fetch.'},
+    ],
+    'global_remote_boards': [
+        {'name': 'Remote OK', 'method': 'public_page_or_feed', 'notes': 'Configure a public feed/page if permitted.'},
+        {'name': 'We Work Remotely', 'method': 'public_page_or_feed', 'notes': 'Configure a public feed/page if permitted.'},
+        {'name': 'Himalayas', 'method': 'public_page_or_feed', 'notes': 'Configure a public feed/page if permitted.'},
+    ],
+}
+
+def write_catalog(path='config/source_catalog.yaml'):
+    path = ROOT / path
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open('w', encoding='utf-8') as f:
+        yaml.safe_dump(DEFAULT_SOURCES, f, sort_keys=False, allow_unicode=True)
+    return path
