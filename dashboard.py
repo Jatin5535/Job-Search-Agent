@@ -1,17 +1,23 @@
 import os
 import streamlit as st, requests
+from job_agent.db import get_jobs
 
 st.set_page_config(page_title='Career Control Tower V8', layout='wide')
 st.title('Career Control Tower V8')
-base=st.text_input('API URL', os.getenv('API_URL', 'http://localhost:8000'))
+base=st.text_input('API URL', os.getenv('API_URL', ''))
 min_score=st.slider('Minimum score',0,100,78)
 status=st.selectbox('Status',['all','new','review','applied','screening','interview','offer','rejected','withdrawn'])
 limit=st.number_input('Max jobs',10,500,100)
 
-try:
-    jobs=requests.get(f'{base}/jobs',params={'limit':int(limit),'min_score':min_score,'status':status},timeout=10).json()
-except Exception as e:
-    st.error(f'API unavailable: {e}'); st.stop()
+params={'limit':int(limit),'min_score':min_score,'status':status}
+if base.strip():
+    try:
+        jobs=requests.get(f'{base.rstrip("/")}/jobs',params=params,timeout=10).json()
+    except requests.RequestException as e:
+        st.warning(f'API unavailable; showing local jobs: {e}')
+        jobs=get_jobs(**params)
+else:
+    jobs=get_jobs(**params)
 
 st.metric('Visible opportunities',len(jobs))
 for j in jobs:
