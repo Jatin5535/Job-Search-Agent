@@ -28,7 +28,11 @@ def ingest_alert_emails(mailbox='INBOX', limit=50)->list[Job]:
     host=os.getenv('IMAP_HOST','imap.gmail.com'); user=os.getenv('IMAP_USER'); password=os.getenv('IMAP_PASSWORD')
     if not user or not password: return []
     M=imaplib.IMAP4_SSL(host); M.login(user,password); M.select(mailbox)
-    typ,data=M.search(None,'UNSEEN'); ids=data[0].split()[-limit:]
+    criteria=['UNSEEN'] if os.getenv('IMAP_UNSEEN_ONLY','true').lower() == 'true' else ['ALL']
+    sender=os.getenv('IMAP_FROM','').strip()
+    if sender:
+        criteria.extend(['FROM', sender])
+    typ,data=M.search(None,*criteria); ids=data[0].split()[-limit:]
     jobs=[]
     for mid in ids:
         typ,msgdata=M.fetch(mid,'(RFC822)')
