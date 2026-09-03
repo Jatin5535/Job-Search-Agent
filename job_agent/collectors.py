@@ -103,6 +103,40 @@ def smartrecruiters(company: dict) -> list[Job]:
                         posted_at=x.get('releasedDate') or x.get('postedDate'), salary=None, department=None, raw=x))
     return jobs
 
+
+def remoteok(source: dict) -> list[Job]:
+    items = fetch_json("https://remoteok.com/api")
+    jobs = []
+    for x in items if isinstance(items, list) else []:
+        if not isinstance(x, dict) or not x.get("id") or not x.get("position"):
+            continue
+        url = x.get("url") or f"https://remoteok.com/remote-jobs/{x['id']}"
+        jobs.append(Job(
+            job_id=f"remoteok:{x['id']}", source="remoteok", company=x.get("company", "Unknown"),
+            title=x.get("position", ""), location=x.get("location", "Remote"),
+            workplace_type="remote", url=url, apply_url=x.get("apply_url") or url,
+            description=clean_html(x.get("description", "")), posted_at=x.get("date"),
+            salary=x.get("salary_min") or x.get("salary_max"), raw=x
+        ))
+    return jobs
+
+
+def arbeitnow(source: dict) -> list[Job]:
+    data = fetch_json("https://www.arbeitnow.com/api/job-board-api")
+    jobs = []
+    for x in (data.get("data", []) if isinstance(data, dict) else []):
+        if not isinstance(x, dict) or not x.get("slug") or not x.get("title"):
+            continue
+        url = x.get("url", "")
+        jobs.append(Job(
+            job_id=f"arbeitnow:{x['slug']}", source="arbeitnow", company=x.get("company_name", "Unknown"),
+            title=x.get("title", ""), location=x.get("location", ""),
+            workplace_type="remote" if x.get("remote") else "unspecified", url=url, apply_url=url,
+            description=clean_html(x.get("description", "")), posted_at=x.get("created_at"),
+            department=x.get("job_types", [None])[0] if x.get("job_types") else None, raw=x
+        ))
+    return jobs
+
 def collect_all(sources: list[dict]) -> list[Job]:
     out = []
     errors = []
@@ -117,6 +151,10 @@ def collect_all(sources: list[dict]) -> list[Job]:
                 out.extend(ashby(source))
             elif provider == "smartrecruiters":
                 out.extend(smartrecruiters(source))
+            elif provider == "remoteok":
+                out.extend(remoteok(source))
+            elif provider == "arbeitnow":
+                out.extend(arbeitnow(source))
             else:
                 errors.append(f"Unsupported provider: {provider}")
         except Exception as exc:

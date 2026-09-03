@@ -1,5 +1,10 @@
 # Add employer-specific public ATS boards here.
-sources: []
+sources:
+  # Public feeds with individual job records; no login or scraping is required.
+  - name: Remote OK
+    provider: remoteok
+  - name: Arbeitnow
+    provider: arbeitnow
 
 career_pages: []
 

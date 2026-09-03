@@ -1,11 +1,24 @@
 import os
 import streamlit as st, requests
 from job_agent.db import get_jobs, init_db
+from job_agent.pipeline import run_scan
 
 st.set_page_config(page_title='Career Control Tower V8', layout='wide')
 st.title('Career Control Tower V8')
 init_db()
 base=st.text_input('API URL', os.getenv('API_URL', ''))
+if st.button('Run public job scan'):
+    try:
+        if base.strip():
+            result=requests.post(f'{base.rstrip("/")}/run',timeout=90).json()
+        else:
+            found, errors=run_scan()
+            result={'jobs_found': found, 'errors': errors}
+        st.success(f"Scan complete: {result.get('jobs_found', 0)} jobs found.")
+        if result.get('errors'):
+            st.warning('; '.join(result['errors']))
+    except (requests.RequestException, OSError) as e:
+        st.error(f'Scan failed: {e}')
 min_score=st.slider('Minimum score',0,100,78)
 status=st.selectbox('Status',['all','new','review','applied','screening','interview','offer','rejected','withdrawn'])
 limit=st.number_input('Max jobs',10,500,100)
