@@ -4,6 +4,10 @@ from job_agent.db import get_jobs, init_db
 from job_agent.pipeline import run_scan
 from job_agent.workspace import build_workspace
 
+for secret_name in ('IMAP_HOST', 'IMAP_USER', 'IMAP_PASSWORD', 'IMAP_FROM'):
+    if secret_name not in os.environ and secret_name in st.secrets:
+        os.environ[secret_name] = str(st.secrets[secret_name])
+
 st.set_page_config(page_title='Career Control Tower V8', layout='wide')
 st.title('Career Control Tower V8')
 init_db()
