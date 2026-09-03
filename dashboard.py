@@ -2,6 +2,7 @@ import os
 import streamlit as st, requests
 from job_agent.db import get_jobs, init_db
 from job_agent.pipeline import run_scan
+from job_agent.workspace import build_workspace
 
 st.set_page_config(page_title='Career Control Tower V8', layout='wide')
 st.title('Career Control Tower V8')
@@ -46,7 +47,10 @@ for j in jobs:
             st.link_button('Open job',url)
             if st.button('Workspace',key='ws_'+j['job_id']):
                 try:
-                    st.session_state['workspace']=requests.get(f"{base}/workspace/{j['job_id']}",timeout=20).json()
+                    if base.strip():
+                        st.session_state['workspace']=requests.get(f"{base.rstrip('/')}/workspace/{j['job_id']}",timeout=20).json()
+                    else:
+                        st.session_state['workspace']=build_workspace(j['job_id'])
                 except Exception as e: st.error(str(e))
 
 ws=st.session_state.get('workspace')
