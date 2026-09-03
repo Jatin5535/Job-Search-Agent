@@ -1,9 +1,10 @@
 import os
 import streamlit as st, requests
-from job_agent.db import get_jobs
+from job_agent.db import get_jobs, init_db
 
 st.set_page_config(page_title='Career Control Tower V8', layout='wide')
 st.title('Career Control Tower V8')
+init_db()
 base=st.text_input('API URL', os.getenv('API_URL', ''))
 min_score=st.slider('Minimum score',0,100,78)
 status=st.selectbox('Status',['all','new','review','applied','screening','interview','offer','rejected','withdrawn'])
